@@ -7,11 +7,18 @@ public class Order {
 
     private int orderId;
     private List<Item> items;
+    private String status;
+
+    public void setStatus(String status)
+    {
+        this.status = status;
+    }
 
     public Order(int orderId)
     {
         this.orderId= orderId;
         this.items= new ArrayList<>();
+        this.status="Created";
     }
 
     public int getOrderId() {
@@ -20,6 +27,12 @@ public class Order {
 
     public List<Item> getItems() {
         return items;
+    }
+
+
+    public String getStatus()
+    {
+        return status;
     }
 
     public void addItem(Item item)
@@ -33,6 +46,8 @@ public class Order {
     }
     @Override
     public String toString() {
-        return "Order ID: " + orderId + "Items : " + items;
+        return "Order ID: " + orderId +
+                " Status: " + status +
+                " Items: " + items;
     }
 }

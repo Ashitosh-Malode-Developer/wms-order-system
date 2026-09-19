@@ -3,10 +3,12 @@ package com.wms.model;
 public class Item {
     private String itemName;
     private int quantity;
+    private int itemId;
 
-    public Item(String itemName, int quantity) {
+    public Item(int itemId, String itemName, int quantity) {
         this.itemName = itemName;
         this.quantity = quantity;
+        this.itemId = itemId;
     }
 
     public String getItemName() {
@@ -20,6 +22,10 @@ public class Item {
     public void setQuantity(int quantity)
     {
         this.quantity=quantity;
+    }
+    public int getItemId()
+    {
+        return itemId;
     }
 
     @Override
