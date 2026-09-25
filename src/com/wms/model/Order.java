@@ -1,11 +1,16 @@
 package com.wms.model;
 
-import java.util.List;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class Order {
 
+   @Min(1)
     private int orderId;
+    @Valid
     private List<Item> items;
     private String status;
 

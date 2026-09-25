@@ -2,6 +2,7 @@ package com.wms.app;
 
 import com.wms.model.Item;
 import com.wms.model.Order;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,6 +10,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class OrderManager {
 
     private List<Order> orders;
@@ -107,24 +109,35 @@ public class OrderManager {
     //DB connection and order create in DB method
     public void createOrder(Order order) {
 
-        String sql = "INSERT INTO orders (order_id, status) VALUES (?, ?)";
+        String orderSql = "INSERT INTO orders (order_id, status) VALUES (?, ?)";
+        String itemSql = "INSERT INTO order_items (order_id, item_id, quantity) VALUES (?, ?, ?)";
 
         try {
             Connection connection = DBConnection.getConnection();
 
-            PreparedStatement statement = connection.prepareStatement(sql);
+            connection.setAutoCommit(false);
 
-            statement.setInt(1, order.getOrderId());
-            statement.setString(2, order.getStatus());
+            PreparedStatement orderStatement = connection.prepareStatement(orderSql);
+            orderStatement.setInt(1, order.getOrderId());
+            orderStatement.setString(2, order.getStatus());
+            orderStatement.executeUpdate();
 
-            statement.executeUpdate();
+            PreparedStatement itemStatement = connection.prepareStatement(itemSql);
 
+            for (Item item : order.getItems()) {
+                itemStatement.setInt(1, order.getOrderId());
+                itemStatement.setInt(2, item.getItemId());
+                itemStatement.setInt(3, item.getQuantity());
+                itemStatement.executeUpdate();
+            }
+
+            connection.commit();
             connection.close();
 
             System.out.println("Order created successfully!");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

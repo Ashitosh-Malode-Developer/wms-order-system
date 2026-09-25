@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WMS Order System</title>
+</head>
+<body>
+
+<h1>WMS Order System</h1>
+
+<!-- Get Order -->
+<input type="number" id="orderId" placeholder="Enter Order ID">
+
+<button onclick="getOrder()">Get Order</button>
+
+<p id="result"></p>
+
+
+<!-- Create Order -->
+<h2>Create Order</h2>
+
+<input type="number" id="newOrderId" placeholder="Order ID">
+<input type="number" id="newItemId" placeholder="Item ID 1">
+<input type="number" id="quantity" placeholder="quantity Item 1">
+<input type="number" id="newItemId1" placeholder="Item ID 2">
+<input type="number" id="quantity1" placeholder="quantity Item 2">
+
+<button onclick="createOrder()">Create Order</button>
+
+<p id="createResult"></p>
+
+
+<script>
+
+    function getOrder() {
+
+        const orderId = document.getElementById("orderId").value;
+
+        fetch("http://localhost:8080/orders/" + orderId)
+            .then(response => response.json())
+            .then(order => {
+                document.getElementById("result").innerText =
+                    JSON.stringify(order);
+            })
+            .catch(error => {
+                document.getElementById("result").innerText =
+                    "Error: Could not connect to database";
+            });
+    }
+
+
+    function createOrder() {
+
+        const orderId = document.getElementById("newOrderId").value;
+        const itemId1 = document.getElementById("newItemId").value;
+        const itemId2= document.getElementById("newItemId1").value;
+        const quantity1=document.getElementById("quantity").value;
+        const quantity2=document.getElementById("quantity1").value;
+
+        const order = {
+            orderId: Number(orderId),
+            status: "CREATED",
+            items: [
+                {
+                    itemId: Number(itemId1),
+                    quantity: Number(quantity1),
+                },
+                {
+                    itemId: Number(itemId2),
+                    quantity: Number(quantity2),
+                }
+            ]
+        };
+
+
+        fetch("http://localhost:8080/orders", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(order)
+        })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById("createResult").innerText =
+                    JSON.stringify(result);
+            });
+    }
+
+</script>
+
+</body>
+</html>
