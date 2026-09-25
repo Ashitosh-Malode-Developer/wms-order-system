@@ -12,9 +12,9 @@ public class Order {
     private int orderId;
     @Valid
     private List<Item> items;
-    private String status;
+    private OrderStatus status;
 
-    public void setStatus(String status)
+    public void setStatus(OrderStatus status)
     {
         this.status = status;
     }
@@ -23,7 +23,7 @@ public class Order {
     {
         this.orderId= orderId;
         this.items= new ArrayList<>();
-        this.status="Created";
+        this.status=OrderStatus.CREATED;
     }
 
     public int getOrderId() {
@@ -35,7 +35,7 @@ public class Order {
     }
 
 
-    public String getStatus()
+    public OrderStatus getStatus()
     {
         return status;
     }

@@ -2,6 +2,7 @@ package com.wms.app;
 
 import com.wms.model.Item;
 import com.wms.model.Order;
+import com.wms.model.OrderStatus;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -51,7 +52,7 @@ public class OrderManager {
                     );
 
                     order.setStatus(
-                            resultSet.getString("status")
+                            OrderStatus.valueOf(resultSet.getString("status"))
                     );
                 }
 
@@ -119,7 +120,7 @@ public class OrderManager {
 
             PreparedStatement orderStatement = connection.prepareStatement(orderSql);
             orderStatement.setInt(1, order.getOrderId());
-            orderStatement.setString(2, order.getStatus());
+            orderStatement.setString(2, order.getStatus().name());
             orderStatement.executeUpdate();
 
             PreparedStatement itemStatement = connection.prepareStatement(itemSql);
